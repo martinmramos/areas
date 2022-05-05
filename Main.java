@@ -124,9 +124,16 @@ class FiguraAbstracta {
 
     public double area() {
         datosFigura();
-        double area1 = r.calcularArea();
-        double area2 = c.calcularArea();
-        double area3 = t.calcularArea();
+        double area1, area2, area3;
+        if (t.altura > 0) {
+            area1 = r.calcularArea();
+            area2 = (c.calcularArea())*0.5;
+            area3 = (t.calcularArea())*2;
+        } else {
+            area1 = r.calcularArea();
+            area2 = c.calcularArea();
+            area3 = t.calcularArea();
+        }
         double areaTotal = area1 + area2 + area3;
         return areaTotal;
     }
@@ -142,19 +149,20 @@ class FiguraAbstracta {
 
     public void imprimir() {
         datosFigura();
-        System.out.println("LOS DATOS DE LA FIGURA SON:");
-        if (r.base > 0) {
+        System.out.println("LA COMPOSICION DE LA FIGURA ES:");
+        if (t.altura > 0) {
             System.out.println("-RECTANGULO-");
             r.imprimir();
-        }
-        if (c.radio > 0) {
-            System.out.println("-CIRCULO-");
+            System.out.println("-MEDIO CIRCULO-");
             c.imprimir();
-        }
-        if (t.altura > 0) {
-            System.out.println("-TRIANGULO-");
+            System.out.println("-DOS TRIANGULOS-");
+            t.imprimir();
             t.imprimir();
         } else {
+            System.out.println("-RECTANGULO-");
+            r.imprimir();
+            System.out.println("-CIRCULO-");
+            c.imprimir();
             System.out.println("El perimetro total es: " + df.format(perimetro()));
         }
         System.out.println("El área total es: " + df.format(area()));
