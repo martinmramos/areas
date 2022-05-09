@@ -37,6 +37,32 @@ class Circulo extends Figura {
     }
 }
 
+class Semicirculo extends Figura {
+    protected double radio;
+
+    public Semicirculo(double radio) {
+        this.radio = radio;
+    }
+
+    public Semicirculo() {
+    }
+
+    @Override
+    public double calcularArea() {
+        return (Math.PI * Math.pow(radio, 2))/2;
+    }
+
+    @Override
+    public double calcularPerimetro() {
+        return (2 * Math.PI * radio)/2;
+    }
+
+    @Override
+    protected void imprimir() {
+        System.out.println("Radio: " + this.radio);
+    }
+        }
+
 class Rectangulo extends Figura {
     protected double base;
     protected double altura;
