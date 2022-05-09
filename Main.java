@@ -18,9 +18,6 @@ class Circulo extends Figura {
         this.radio = radio;
     }
 
-    public Circulo() {
-    }
-
     @Override
     public double calcularArea() {
         return (Math.PI * Math.pow(radio, 2));
@@ -33,6 +30,7 @@ class Circulo extends Figura {
 
     @Override
     protected void imprimir() {
+        System.out.println("CIRCULO:");
         System.out.println("Radio: " + this.radio);
     }
 }
@@ -44,24 +42,22 @@ class Semicirculo extends Figura {
         this.radio = radio;
     }
 
-    public Semicirculo() {
-    }
-
     @Override
     public double calcularArea() {
-        return (Math.PI * Math.pow(radio, 2))/2;
+        return (Math.PI * Math.pow(radio, 2)) / 2;
     }
 
     @Override
     public double calcularPerimetro() {
-        return (2 * Math.PI * radio)/2;
+        return (2 * Math.PI * radio) / 2;
     }
 
     @Override
     protected void imprimir() {
+        System.out.println("SEMICIRCULO:");
         System.out.println("Radio: " + this.radio);
     }
-        }
+}
 
 class Rectangulo extends Figura {
     protected double base;
@@ -70,9 +66,6 @@ class Rectangulo extends Figura {
     public Rectangulo(double base, double altura) {
         this.base = base;
         this.altura = altura;
-    }
-
-    public Rectangulo() {
     }
 
     @Override
@@ -87,6 +80,7 @@ class Rectangulo extends Figura {
 
     @Override
     protected void imprimir() {
+        System.out.println("RECTANGULO:");
         System.out.println("Base: " + this.base + "\nAltura: " + this.altura);
     }
 }
@@ -98,9 +92,6 @@ class Triangulo extends Figura {
     public Triangulo(double base, double altura) {
         this.base = base;
         this.altura = altura;
-    }
-
-    public Triangulo() {
     }
 
     @Override
@@ -115,93 +106,61 @@ class Triangulo extends Figura {
 
     @Override
     protected void imprimir() {
+        System.out.println("TRIANGULO:");
         System.out.println("Base: " + this.base + "\nAltura: " + this.altura);
     }
 }
 
 class FiguraAbstracta {
 
-    DecimalFormat df = new DecimalFormat("#.##");
-    private double base;
-    private double diametro;
-    private double altura;
-    Rectangulo r = new Rectangulo();
-    Circulo c = new Circulo();
-    Triangulo t = new Triangulo();
+    Figura[] composicion;
 
-    public FiguraAbstracta(double base, double diametro) {
-        this.base = base;
-        this.diametro = diametro;
+    public FiguraAbstracta(Figura[] composicion) {
+        this.composicion = composicion;
     }
 
-    public FiguraAbstracta(double base, double diametro, double altura) {
-        this.base = base;
-        this.diametro = diametro;
-        this.altura = altura;
-    }
-
-    public void datosFigura() {
-        r.base = this.base;
-        r.altura = this.diametro;
-        c.radio = this.diametro / 2;
-        t.base = this.base;
-        t.altura = this.altura;
-    }
-
-    public double area() {
-        datosFigura();
-        double area1, area2, area3;
-        if (t.altura > 0) {
-            area1 = r.calcularArea();
-            area2 = (c.calcularArea())*0.5;
-            area3 = (t.calcularArea())*2;
-        } else {
-            area1 = r.calcularArea();
-            area2 = c.calcularArea();
-            area3 = t.calcularArea();
+    public double areaTotal() {
+        double result = 0;
+        for (int i = 0; i < composicion.length; i++) {
+            result += composicion[i].calcularArea();
         }
-        double areaTotal = area1 + area2 + area3;
-        return areaTotal;
+        return result;
     }
 
-    public double perimetro() {
-        datosFigura();
-        double perimetro1 = r.calcularPerimetro();
-        double perimetro2 = c.calcularPerimetro();
-        double perimetro3 = t.calcularPerimetro();
-        double perimetroTotal = perimetro1 + perimetro2 + perimetro3;
-        return perimetroTotal;
-    }
-
-    public void imprimir() {
-        datosFigura();
-        System.out.println("LA COMPOSICION DE LA FIGURA ES:");
-        if (t.altura > 0) {
-            System.out.println("-RECTANGULO-");
-            r.imprimir();
-            System.out.println("-MEDIO CIRCULO-");
-            c.imprimir();
-            System.out.println("-DOS TRIANGULOS-");
-            t.imprimir();
-            t.imprimir();
-        } else {
-            System.out.println("-RECTANGULO-");
-            r.imprimir();
-            System.out.println("-CIRCULO-");
-            c.imprimir();
-            System.out.println("El perimetro total es: " + df.format(perimetro()));
+    public double perimetroTotal() {
+        double result = 0;
+        for (int i = 0; i < composicion.length; i++) {
+            result += composicion[i].calcularPerimetro();
         }
-        System.out.println("El área total es: " + df.format(area()));
+        return result;
+    }
+
+    public void imprimirTodo() {
+        System.out.println("-- COMPOSICIÓN DE LA FIGURA --");
+        for (int i = 0; i < composicion.length; i++) {
+            composicion[i].imprimir();
+        }
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        FiguraAbstracta uno = new FiguraAbstracta(10, 5);
-        uno.imprimir();
 
-        FiguraAbstracta dos = new FiguraAbstracta(22, 12, 10);
-        dos.imprimir();
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        FiguraAbstracta figura1 = new FiguraAbstracta(new Figura[]{new Circulo(2.5), new Rectangulo(10, 5)});
+        figura1.imprimirTodo();
+        double area = figura1.areaTotal();
+        System.out.println("El area de la figura es: " + df.format(area));
+        double perimetro = figura1.perimetroTotal();
+        System.out.println("El perimetro de la figura es: " + df.format(perimetro));
+
+        FiguraAbstracta figura2 = new FiguraAbstracta(new Figura[]{new Semicirculo(6), new Rectangulo(22, 12),
+                new Triangulo(22, 10), new Triangulo(22, 10)});
+        figura2.imprimirTodo();
+        double area2 = figura2.areaTotal();
+        System.out.println("El area de la figura es: " + df.format(area2));
+
     }
 }
 
